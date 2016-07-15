@@ -29,7 +29,7 @@ int run(char c, FILE *file){
 			putchar(here->data);
 			break;
 		case ',':
-			here->data = getchar();
+			here->data = getchar();while(getchar()!='\n');
 			break;
 		case '>':
 			if(here->right==NULL){
@@ -68,18 +68,34 @@ int run(char c, FILE *file){
 	return 0;
 }
 
-int main(int argc, char **argv){
-	FILE *file = fopen(argv[1],"r");
-	int retval = 0;
-	here = newcell(NULL,NULL);
-	if(file==NULL){
-		fprintf(stderr,"%s: can't open file %s\n",argv[0],argv[1]);
-		return 1;
+void cleanup(struct bfcell *cell){
+	if(cell->left!=NULL){
+		cell->left->right=NULL;
+		cleanup(cell->left);
 	}
-	char c = getc(file);
-	while(c!=EOF){
-		retval += run(c,file);
-		c = getc(file);
+	if(cell->right!=NULL){
+		cell->right->left=NULL;
+		cleanup(cell->right);
+	}
+	free(cell);
+}
+
+int main(int argc, char **argv){
+	int retval = 0;
+	int i;
+	for(i=1;i<argc;i++){
+		FILE *file = fopen(argv[i],"r");
+		here = newcell(NULL,NULL);
+		if(file==NULL){
+			fprintf(stderr,"%s: can't open file %s\n",argv[0],argv[1]);
+			return 1;
+		}
+		char c = getc(file);
+		while(c!=EOF){
+			retval += run(c,file);
+			c = getc(file);
+		}
+		cleanup(here);
 	}
 	return retval;
 }
