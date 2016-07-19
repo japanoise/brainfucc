@@ -96,6 +96,7 @@ int main(int argc, char **argv){
 			c = getc(file);
 		}
 		cleanup(here);
+		fclose(file);
 	}
 	return retval;
 }
