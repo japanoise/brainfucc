@@ -2,6 +2,7 @@
 Just another brainfuck interpretor,
 
 ## So what's so special about this one?
+~~Nothing it's shit use ScoreUnder's~~
 
 1. Sane build system (makefile)
 2. Infinite tape
